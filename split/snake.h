@@ -2,6 +2,7 @@
 #include "grid.h"
 
 enum class direction { UP, RIGHT, DOWN, LEFT, NONE };
+class game;
 
 //snake structure
 struct node {
@@ -16,6 +17,6 @@ public:
 	node * head;
 	direction face = direction::NONE;
 
-	void move();
-	void updateBody(node * tmp);
+	void move(game& g);
+	void updateBody(game &g, node * tmp);
 };

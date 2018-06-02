@@ -11,5 +11,4 @@ public:
 	{
 		grid[x][y] = c;
 	}
-
-} my_map;
+};

@@ -1,21 +1,26 @@
-// ===============================================================
-// Author: https://github.com/isaychris
-// Date: 1/16/17
-//
-// Project: snake game split
-// Version: 0.8
-//
-// TODO: 
-// - snake body [done]
-//================================================================
 #include <iostream>
 #include <string>
-#include <chrono>
-#include <thread>
 #include <conio.h>
-#include <windows.h>
-
 #include "game.h"
+
+// initiates the game
+void game::init() {
+
+	fillBorders();
+	my_fruit = new fruit();
+	my_fruit->createFruit(*this);
+
+	//creates snake body
+	my_snake.head = new node;
+	my_snake.head->part = '<';
+	my_snake.head->x = ROW / 2;
+	my_snake.head->y = COLUMN / 2;
+	my_snake.head->next = nullptr;
+	my_map.draw(my_snake.head->x, my_snake.head->y, my_snake.head->part);
+
+	//sets the game to running.
+	running = true;
+}
 
 // checks for directional input
 void game::processInput() {
@@ -39,7 +44,7 @@ void game::processInput() {
 
 // updates the game
 void game::update() {
-	my_snake.move();
+	my_snake.move(*this);
 	collisionCheck();
 }
 
@@ -55,10 +60,10 @@ void game::render() {
 		cout << endl;
 	}
 	// draws the text
-	cout << " Use WASD to control the s" << endl;
+	cout << " Use WASD to control the snake" << endl;
 	cout << " - score: " << score << endl;
-	cout << " - s: [" << my_snake.head->x << ", " << my_snake.head->y << "] " << endl;
-	cout << " - f: [" << my_fruit->x << ", " << my_fruit->y << "] " << endl;
+	cout << " - snake: [" << my_snake.head->x << ", " << my_snake.head->y << "] " << endl;
+	cout << " - fruit: [" << my_fruit->x << ", " << my_fruit->y << "] " << endl;
 	cout << " ";
 
 	// draws the length of the snake
@@ -78,7 +83,7 @@ void game::collisionCheck() {
 
 		// if collision, fruit deleted and new one created.
 		my_fruit = new fruit();
-		my_fruit->createFruit();
+		my_fruit->createFruit(*this);
 
 		//snake body created
 		node * body = new node();
@@ -127,63 +132,3 @@ void game::fillBorders() {
 		}
 	}
 }
-
-// hides the blinking cursor in console
-void hidecursor()
-{
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_CURSOR_INFO info;
-	info.dwSize = 100;
-	info.bVisible = FALSE;
-	SetConsoleCursorInfo(consoleHandle, &info);
-}
-
-// refreshes display
-void refresh()
-{
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD Position;
-
-	Position.X = 0;
-	Position.Y = 0;
-
-	SetConsoleCursorPosition(hOut, Position);
-}
-
-// initiates the s game
-void game::init() {
-
-	fillBorders();
-	my_fruit = new fruit();
-	my_fruit->createFruit();
-
-	//creates snake body
-	my_snake.head = new node;
-	my_snake.head->part = '<';
-	my_snake.head->x = ROW / 2;
-	my_snake.head->y = COLUMN / 2;
-	my_snake.head->next = nullptr;
-	my_map.draw(my_snake.head->x, my_snake.head->y, my_snake.head->part);
-
-	//sets the game to running.
-	running = true;
-}
-
-// snake game driver
-int main() {
-	game g;
-
-	hidecursor();
-	g.init();
-
-
-	while (g.running) {
-		g.processInput();
-		g.update();
-		g.render();
-		refresh();
-	}
-}
-

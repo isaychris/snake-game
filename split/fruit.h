@@ -1,10 +1,10 @@
 #pragma once
-#include "grid.h"
+class game;
 
 class fruit {
 public:
 	int x;
 	int y;
 
-	void createFruit();
+	void createFruit(game &g);
 };

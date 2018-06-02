@@ -1,12 +1,10 @@
 #pragma once
 #include "fruit.h"
-#pragma once
 #include "snake.h"
-#include "grid.h"
 
 class game {
-
 public:
+	map my_map;
 	bool running;
 
 	void init();

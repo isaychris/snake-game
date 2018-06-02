@@ -1,8 +1,9 @@
 #include "snake.h"
-
+#include "grid.h"
+#include "game.h"
 
 //moves the snake
-void snake::move() {
+void snake::move(game &g) {
 	//current position before moving,
 	//used for passing into updatebody();
 	node *pre = new node;
@@ -16,28 +17,29 @@ void snake::move() {
 	switch (face) {
 	case direction::UP:
 		head->x--;
-		my_map.draw(head->x, head->y, '^');
+		g.my_map.draw(head->x, head->y, '^');
 		break;
 	case direction::DOWN:
 		head->x++;
-		my_map.draw(head->x, head->y, 'v');
+		g.my_map.draw(head->x, head->y, 'v');
+		break;
 	case direction::RIGHT:
 		head->y++;;
-		my_map.draw(head->x, head->y, '>');
+		g.my_map.draw(head->x, head->y, '>');
 		break;
 	case direction::LEFT:
 		head->y--;
-		my_map.draw(head->x, head->y, '<');
+		g.my_map.draw(head->x, head->y, '<');
 		break;
 	}
 
-	my_map.draw(pre->x, pre->y, ' ');
+	g.my_map.draw(pre->x, pre->y, ' ');
 
-	updateBody(pre);
+	updateBody(g, pre);
 }
 
 // updates the body of the snake
-void snake::updateBody(node* pre) {
+void snake::updateBody(game & g, node* pre) {
 	int x = 0;
 	int y = 0;
 
@@ -49,11 +51,11 @@ void snake::updateBody(node* pre) {
 		y = root->y;
 		root->x = pre->x;
 		root->y = pre->y;
-		my_map.draw(root->x, root->y, root->part);
+		g.my_map.draw(root->x, root->y, root->part);
 		pre->x = x;
 		pre->y = y;
 		root = root->next;
 	}
 
-	my_map.draw(x, y, ' ');
+	g.my_map.draw(x, y, ' ');
 }
