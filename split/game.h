@@ -1,11 +1,8 @@
 #pragma once
 #include "fruit.h"
+#pragma once
 #include "snake.h"
-
-const int ROW = 15;
-const int COLUMN = 30;
-class snake;
-class fruit;
+#include "grid.h"
 
 class game {
 
@@ -19,7 +16,7 @@ public:
 
 private:
 	snake my_snake;
-	fruit my_fruit;
+	fruit * my_fruit;
 
 	int score = 0;
 

@@ -1,5 +1,5 @@
 #include "snake.h"
-#include "game.h"
+
 
 //moves the snake
 void snake::move() {
@@ -16,22 +16,22 @@ void snake::move() {
 	switch (face) {
 	case direction::UP:
 		head->x--;
-		map.draw(head->x, head->y, '^');
+		my_map.draw(head->x, head->y, '^');
 		break;
 	case direction::DOWN:
 		head->x++;
-		map.draw(head->x, head->y, 'v');
+		my_map.draw(head->x, head->y, 'v');
 	case direction::RIGHT:
 		head->y++;;
-		map.draw(head->x, head->y, '>');
+		my_map.draw(head->x, head->y, '>');
 		break;
 	case direction::LEFT:
 		head->y--;
-		map.draw(head->x, head->y, '<');
+		my_map.draw(head->x, head->y, '<');
 		break;
 	}
 
-	map.draw(pre->x, pre->y, ' ');
+	my_map.draw(pre->x, pre->y, ' ');
 
 	updateBody(pre);
 }
@@ -49,11 +49,11 @@ void snake::updateBody(node* pre) {
 		y = root->y;
 		root->x = pre->x;
 		root->y = pre->y;
-		map.draw(root->x, root->y, root->part);
+		my_map.draw(root->x, root->y, root->part);
 		pre->x = x;
 		pre->y = y;
 		root = root->next;
 	}
 
-	map.draw(x, y, ' ');
+	my_map.draw(x, y, ' ');
 }

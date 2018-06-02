@@ -1,4 +1,6 @@
 #pragma once
+#include "grid.h"
+
 enum class direction { UP, RIGHT, DOWN, LEFT, NONE };
 
 //snake structure

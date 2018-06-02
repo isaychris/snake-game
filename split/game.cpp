@@ -50,7 +50,7 @@ void game::render() {
 	// draws the grid
 	for (int i = 0; i < ROW; i++) {
 		for (int j = 0; j < COLUMN; j++) {
-			cout << map.grid[i][j];
+			cout << my_map.grid[i][j];
 		}
 		cout << endl;
 	}
@@ -58,7 +58,7 @@ void game::render() {
 	cout << " Use WASD to control the s" << endl;
 	cout << " - score: " << score << endl;
 	cout << " - s: [" << my_snake.head->x << ", " << my_snake.head->y << "] " << endl;
-	cout << " - f: [" << my_fruit.x << ", " << my_fruit.y << "] " << endl;
+	cout << " - f: [" << my_fruit->x << ", " << my_fruit->y << "] " << endl;
 	cout << " ";
 
 	// draws the length of the snake
@@ -73,11 +73,12 @@ void game::render() {
 void game::collisionCheck() {
 
 	//fruit collision
-	if (my_snake.head->x == my_fruit.x && my_snake.head->y == my_fruit.y) {
+	if (my_snake.head->x == my_fruit->x && my_snake.head->y == my_fruit->y) {
 		score++;
 
 		// if collision, fruit deleted and new one created.
-		my_fruit.createFruit();
+		my_fruit = new fruit();
+		my_fruit->createFruit();
 
 		//snake body created
 		node * body = new node();
@@ -119,10 +120,10 @@ void game::fillBorders() {
 
 	for (int i = 0; i < ROW; i++) {
 		for (int j = 0; j < COLUMN; j++) {
-			map.grid[i][0] = block;
-			map.grid[0][j] = block;
-			map.grid[i][COLUMN - 1] = block;
-			map.grid[ROW - 1][j] = block;
+			my_map.grid[i][0] = block;
+			my_map.grid[0][j] = block;
+			my_map.grid[i][COLUMN - 1] = block;
+			my_map.grid[ROW - 1][j] = block;
 		}
 	}
 }
@@ -155,7 +156,8 @@ void refresh()
 void game::init() {
 
 	fillBorders();
-	my_fruit.createFruit();
+	my_fruit = new fruit();
+	my_fruit->createFruit();
 
 	//creates snake body
 	my_snake.head = new node;
@@ -163,7 +165,7 @@ void game::init() {
 	my_snake.head->x = ROW / 2;
 	my_snake.head->y = COLUMN / 2;
 	my_snake.head->next = nullptr;
-	map.draw(my_snake.head->x, my_snake.head->y, my_snake.head->part);
+	my_map.draw(my_snake.head->x, my_snake.head->y, my_snake.head->part);
 
 	//sets the game to running.
 	running = true;
