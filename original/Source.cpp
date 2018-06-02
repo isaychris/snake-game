@@ -1,9 +1,9 @@
 // ===============================================================
 // Author: https://github.com/isaychris
-// Date: 1/16/17
+// Date: 6/16/18
 //
 // Project: snake game
-// Version: 0.8.1
+// Version: 0.9.0
 //
 // TODO: 
 // - snake body [done]
@@ -21,8 +21,6 @@ const size_t ROW = 15;
 const size_t COLUMN = 30;
 enum class Direction { UP, DOWN, LEFT, RIGHT, NONE };
 
-class Game;
-
 //snake structure
 struct node {
 	int x;
@@ -31,6 +29,7 @@ struct node {
 	node *next;
 };
 
+class Fruit;
 
 // the class for snake game;
 class Game {
@@ -40,13 +39,12 @@ public:
 	void update();
 	void init();
 	bool running;
-
 	char grid[ROW][COLUMN] = { ' ' };
 
 private:
 
 	node * head;
-	Fruit apple;
+	Fruit * apple;
 	Direction face = Direction::NONE;
 
 	int score = 0;
@@ -55,29 +53,25 @@ private:
 	void collisionCheck();
 	void updateBody(node * tmp);
 	void fillBorders();
+	void createFruit(Fruit * apple);
+
 };
 
 // fruit structure
 class Fruit {
 public:
-	Game g;
-	void set(Game &a) {
-		g = a;
-	}
 	int x, y;
-
-	void createFruit();
 };
 
+
 // generates a new fruit
-void Fruit::createFruit() {
+void Game::createFruit(Fruit * apple) {
 	std::mt19937 mt;
 	mt.seed(time(nullptr));
 
-	x = mt() % (ROW - 2) + 1;
-	y = mt() % (COLUMN - 2) + 1;
-	g.grid[x][y] = 'x';
-
+	apple->x = mt() % (ROW - 2) + 1;
+	apple->y = mt() % (COLUMN - 2) + 1;
+	grid[apple->x][apple->y] = 'x';
 }
 
 // checks for directional input
@@ -186,7 +180,7 @@ void Game::draw() {
 	cout << " Use WASD to control the snake" << endl;
 	cout << " - score: " << score << endl;
 	cout << " - snake: [" << head->x << ", " << head->y << "] " << endl;
-	cout << " - fruit: [" << apple.x << ", " << apple.y << "] " << endl;
+	cout << " - fruit: [" << apple->x << ", " << apple->y << "] " << endl;
 	cout << " ";
 
 	// draws the length of the snake
@@ -201,11 +195,12 @@ void Game::draw() {
 void Game::collisionCheck() {
 
 	//fruit collision
-	if (head->x == apple.x && head->y == apple.y) {
+	if (head->x == apple->x && head->y == apple->y) {
 		score++;
 
 		// if collision, fruit deleted and new one created.
-		apple.createFruit();
+		apple = new Fruit();
+		createFruit(apple);
 
 		//snake body created
 		node * body = new node();
@@ -290,8 +285,9 @@ void refresh()
 void Game::init() {
 	srand((unsigned)time(nullptr));
 	fillBorders();
-	apple.set(*this);
-	apple.createFruit();
+
+	apple = new Fruit();
+	createFruit(apple);
 
 	//creates snake body
 	head = new node;
@@ -310,7 +306,6 @@ int main() {
 	Game g;
 	hidecursor();
 	g.init();
-
 
 	while (g.running) {
 		g.processInput();
