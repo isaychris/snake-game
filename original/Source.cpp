@@ -1,9 +1,9 @@
 // ===============================================================
 // Author: https://github.com/isaychris
-// Date: 6/16/18
+// Date: 6/2/18
 //
 // Project: snake game
-// Version: 0.9.0
+// Version: 1.0.0
 //
 // TODO: 
 // - snake body [done]
